@@ -29,7 +29,7 @@ g.plot_degree_distribution_nx(grafo)
 
 ```
 
-![Degree Distribution](https://github.com/freh-g/graphlot/images/degree_distribution.jpg?raw=true)
+![Degree Distribution](https://github.com/freh-g/graphlot/blob/main/images/degree_distribution.jpg?raw=true)
 
 
 
@@ -42,7 +42,7 @@ gv.visualize_network(grafo,mode = '2d',node_color_attribute='Type',legend = 'Typ
 
 
 
-![Network Visualization](https://github.com/freh-g/graphlot/images/network.jpg?raw=true)
+![Network Visualization](https://github.com/freh-g/graphlot/blob/main/images/network.jpg?raw=true)
 
 
 

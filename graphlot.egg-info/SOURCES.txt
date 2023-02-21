@@ -1,6 +1,8 @@
 LICENSE.txt
 README.md
 setup.py
+graphlot/__init__.py
+graphlot/graphlot.py
 graphlot.egg-info/PKG-INFO
 graphlot.egg-info/SOURCES.txt
 graphlot.egg-info/dependency_links.txt

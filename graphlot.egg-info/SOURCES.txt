@@ -1,0 +1,8 @@
+LICENSE.txt
+README.md
+setup.py
+graphlot.egg-info/PKG-INFO
+graphlot.egg-info/SOURCES.txt
+graphlot.egg-info/dependency_links.txt
+graphlot.egg-info/requires.txt
+graphlot.egg-info/top_level.txt

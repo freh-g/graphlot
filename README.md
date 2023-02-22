@@ -63,7 +63,7 @@ gv.visualize_network(grafo,mode = '3d',node_color_attribute='Type',legend = 'Typ
 ```
 
 
-![3d Visualization](https://freh-g.github.io/3Dnet/)
+[3d Visualization](https://freh-g.github.io/3Dnet/)
 
 
 

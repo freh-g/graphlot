@@ -5,6 +5,8 @@ import igraph as ig
 import matplotlib.pyplot as plt
 import random 
 import textalloc as ta
+import plotly.graph_objs as go
+
 
 
 def CreateNetworkFromRandomClasses(n_of_class_nodes, n_edges):
@@ -340,7 +342,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
 
 
 
-def plot_degree_distribution_nx(graph,save_fig=False):
+def plot_degree_distribution(graph,save_fig=False):
     degree=[val for (node, val) in graph.degree()]
     freqdict=Counter(degree)
     frequency=[]

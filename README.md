@@ -21,7 +21,7 @@ The library takes as input a networx graph and can plot the degree distribution 
 
 To demonstrate it we will generate a random network with the function CreateNetworkFromRandomClasses(). This function takes as input a list and an integer. The list is of length n_classes and in which every value is the number of nodes of that specific classes. The integer is the number of random edges of the graph.
 
-The function stores the information of the node belonging to a specific class in "type" node attribute and node name in "name" node attribute.
+The function stores the information of the node belonging to a specific class in "Type" node attribute and node name in "name" node attribute.
 
 ```
 
@@ -32,7 +32,7 @@ import random
 random.seed(123127844)
 
 grafo = gv.CreateNetworkFromRandomClasses([10,20,30,40,50],500)
-g.plot_degree_distribution_nx(grafo)
+gvV.plot_degree_distribution(grafo)
 
 ```
 
@@ -52,7 +52,18 @@ gv.visualize_network(grafo,mode = '2d',node_color_attribute='Type',legend = 'Typ
 ![Network Visualization](https://github.com/freh-g/graphlot/blob/main/images/network.jpg?raw=true)
 
 
+Moreover graphlot allows to plot networks in 3d in order to have a more flexible visualization.
 
+
+```
+
+random.seed(123127844)
+gv.visualize_network(grafo,mode = '3d',node_color_attribute='Type',legend = 'Type',cmap='viridis',annotate = 'Name')
+
+```
+
+
+![3d Visualization](https://github.com/freh-g/graphlot/blob/main/images/network.html?raw=true)
 
 
 

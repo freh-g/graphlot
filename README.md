@@ -63,6 +63,6 @@ gv.visualize_network(grafo,mode = '3d',node_color_attribute='Type',legend = 'Typ
 ```
 
 
-[3d Visualization](https://htmlpreview.github.io/?https://github.com/freh-g/graphlot/blob/main/index.html)
+[3D Network](https://htmlpreview.github.io/?https://github.com/freh-g/graphlot/blob/main/images/network.html)
 
 

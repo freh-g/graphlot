@@ -31,8 +31,8 @@ import random
 
 random.seed(123127844)
 
-grafo = gv.CreateNetworkFromRandomClasses([10,20,30,40,50],500)
-gvV.plot_degree_distribution(grafo)
+grafo = gv.CreateNetworkFromRandomClasses([20,20,30], 150)
+gv.plot_degree_distribution(grafo)
 
 ```
 
@@ -63,7 +63,7 @@ gv.visualize_network(grafo,mode = '3d',node_color_attribute='Type',legend = 'Typ
 ```
 
 
-![3d Visualization](https://github.com/freh-g/graphlot/blob/main/images/network.html?raw=true)
+![3d Visualization](https://github.com/freh-g/graphlot/blob/main/images/network.html)
 
 
 

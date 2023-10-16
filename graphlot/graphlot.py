@@ -29,9 +29,6 @@ def CreateNetworkFromRandomClasses(n_of_class_nodes, n_edges):
 
 
 
-
-
-
 def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='2d',
                       node_color_attribute=False, cmap = "viridis" ,edge_color_attribute=False,annotate = False,
                       node_shape = 'o', node_size=100, node_alpha=1,node_outline='black',
@@ -48,9 +45,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         if layout == 'auto':
             iG=ig.Graph.from_networkx(G)
             my_layout=iG.layout_auto()
-            sources = iG.get_edge_dataframe()['source'].map(iG.get_vertex_dataframe()._nx_name)
-            targets = iG.get_edge_dataframe()['target'].map(iG.get_vertex_dataframe()._nx_name)
-            node_coordinates=dict(enumerate(my_layout.coords))
+            node_coordinates=dict(zip([v['_nx_name'] for v in list(iG.vs)],my_layout.coords))
         elif layout == 'spring':
             node_coordinates=nx.spring_layout(G)
         elif layout == 'circular':
@@ -154,9 +149,8 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         if layout=='auto':
             iG=ig.Graph.from_networkx(G)
             my_layout=iG.layout_auto(dim=3)
-            sources = iG.get_edge_dataframe()['source'].map(iG.get_vertex_dataframe()._nx_name)
-            targets = iG.get_edge_dataframe()['target'].map(iG.get_vertex_dataframe()._nx_name)
-            node_coordinates=dict(enumerate(my_layout.coords))
+            node_coordinates=dict(zip([v['_nx_name'] for v in list(iG.vs)],my_layout.coords))
+        
         if layout == 'kk':
             node_coordinates=nx.kamada_kawai_layout(G,dim=3)
         elif layout == 'spring':
@@ -185,6 +179,8 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
             labdict = dict(zip(list(G.nodes()),lab))
         else:
             lab = []
+            labdict = dict(zip(list(G.nodes),['' for n in G.nodes]))
+            print(labdict)
         
         
         
@@ -320,8 +316,6 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
     elif mode == 'cytoscape':
         
         pass # STILL TO BE IMPLEMENTED
-
-
 
 
 

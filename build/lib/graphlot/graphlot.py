@@ -28,7 +28,6 @@ def CreateNetworkFromRandomClasses(n_of_class_nodes, n_edges):
 
 
 
-
 def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='2d',
                       node_color_attribute=False, edge_attribute_width = False,factor_edge_width = 1 ,cmap = "viridis" ,edge_color_attribute=False, edge_annotation_attributes = False 
                       ,node_annotation = False, node_shape = 'o', node_size=100, node_alpha=1,node_outline='black',
@@ -98,8 +97,12 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
 
 
     if node_color_attribute:
-
-        NodeClasses=[n[1][node_color_attribute] for n in G.nodes(data=True)]
+        NodeClasses = []
+        for n in G.nodes(data = True):
+            try:
+                NodeClasses.append(n[1][node_color_attribute])
+            except:
+                NodeClasses.append('unknown')
         N = len(set(NodeClasses))
         Cdict=dict(zip(set(NodeClasses),[n for n in range(N)]))
         NodeColors = list(map(Cdict.get,NodeClasses))
@@ -205,7 +208,12 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                             )
         if legend:
             
-            lab=[n[1][legend] for n in G.nodes(data=True)]
+            lab = []
+            for n in G.nodes(data = True):
+                try:
+                    lab.append(n[1][legend])
+                except:
+                    lab.append('unknown')
             handles,labels=scatter.legend_elements()[0],set(lab)
             ax.legend(handles=handles,labels=labels, loc="best")
             
@@ -268,8 +276,13 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         #==================================================     NODE COLORS    ========================================
 
         if node_color_attribute:
-            
-            NodeClasses=[n[1][node_color_attribute] for n in G.nodes(data=True)]
+            NodeClasses = []
+            for n in G.nodes(data=True):
+                try:
+                    NodeClasses.append(n[1][node_color_attribute])
+                except:
+                    NodeClasses.append('unknown')
+                
             N = len(set(NodeClasses))
             Cdict=dict(zip(set(NodeClasses),[n for n in range(N)]))
             NodeColors = list(map(Cdict.get,NodeClasses))
@@ -293,9 +306,17 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                 t += 3
                 traces.append(trace)
                 
-
+            nodes_unknown = [n[0] for n in G.nodes(data = True) if n[1] == {}]
+            nodes_known = [n for n in G.nodes(data = True) if n[1] != {}]
             for Class in set(NodeClasses):
-                ClassNodes = [n[0] for n in G.nodes(data = True) if n[1][node_color_attribute] == Class]
+                if Class == 'unknown':
+                    ClassNodes = nodes_unknown
+                else:
+                    ClassNodes = [n[0] for n in nodes_known if n[1][node_color_attribute] == Class]
+
+
+                        
+                    
                 ClassLabels = [labdict[n] for n in ClassNodes]
                 Xc = [node_coordinates[n][0] for n in ClassNodes]
                 Yc = [node_coordinates[n][1] for n in ClassNodes]
@@ -408,6 +429,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
     elif mode == 'cytoscape':
         
         pass # STILL TO BE IMPLEMENTED
+
 
 
 

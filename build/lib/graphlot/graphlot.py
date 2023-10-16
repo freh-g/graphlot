@@ -29,28 +29,111 @@ def CreateNetworkFromRandomClasses(n_of_class_nodes, n_edges):
 
 
 
-
-
-
 def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='2d',
-                      node_color_attribute=False, cmap = "viridis" ,edge_color_attribute=False,annotate = False,
-                      node_shape = 'o', node_size=100, node_alpha=1,node_outline='black',
+                      node_color_attribute=False, edge_attribute_width = False,factor_edge_width = 1 ,cmap = "viridis" ,edge_color_attribute=False, edge_annotation_attributes = False 
+                      ,node_annotation = False, node_shape = 'o', node_size=100, node_alpha=1,node_outline='black',
                       edge_linewidth=0.5,edge_alpha=0.5,edge_color='black',
                       annotation_arrows = False, text_size = 10, text_color = 'black', text_margin = 0.01, 
                       text_min_distance = 0.015, text_max_distance = 0.07,
                       save=False,legend=False):
     
-    #UPGRADE THE DICTIONARIES ===============================================================================================================
+# ===========================================================================================================================
 
+
+#                                              GATHER DATA FROM THE NETWORK
+
+
+#============================================================================================================================
+        
+
+    
+#          =============================================== EDGES ===================================================
+
+    # COLOR        
+    if edge_color_attribute:
+        edge_colors = []
+        for (source,target,attributedict) in G.edges(data = True):
+            try:
+                edge_colors.append(attributedict[edge_color_attribute])
+            except:
+                edge_colors.append('black')
+    else:
+        edge_colors = ['black' for edge in G.edges]
+
+
+
+
+    # TICKNESS        
+    if edge_attribute_width:
+        edge_widths = []
+        for (source,target,attributedict) in G.edges(data = True):
+            try:
+                edge_widths.append(factor_edge_width * np.abs(attributedict[edge_attribute_width]))
+            except:
+                edge_widths.append(np.abs(edge_linewidth))
+    else:
+        edge_widths = [np.abs(edge_linewidth) for edge in G.edges]
+                
+    # ANNOTATION        
+    if edge_annotation_attributes:
+        edge_annotations = []
+        for (source,target,attributedict) in G.edges(data = True):
+            anno_dict = {}
+            if len(set(edge_annotation_attributes).intersection(set(list(attributedict.keys())))) >= 1: # Check if there is at least one interesting thing to annotate
+                for ann in edge_annotation_attributes:
+                    try:                    
+                        anno_dict[ann] = attributedict[ann]
+                    except:
+                        pass
+                
+                edge_annotations.append(str(anno_dict))   
+            
+            else:
+                edge_annotations.append('')
+    else:
+        edge_annotations = ['' for edge in G.edges]
+
+
+#           =============================================== NODES ===================================================
+
+
+    if node_color_attribute:
+
+        NodeClasses=[n[1][node_color_attribute] for n in G.nodes(data=True)]
+        N = len(set(NodeClasses))
+        Cdict=dict(zip(set(NodeClasses),[n for n in range(N)]))
+        NodeColors = list(map(Cdict.get,NodeClasses))
+
+        colors  = [f"C{i}" for i in np.arange(1, max(NodeColors)+1)]
+#             cmap, norm = matplotlib.colors.from_levels_and_colors(np.arange(1, max(NodeColors)+2), colors)
+
+    else:
+        N = len(G.nodes)
+        NodeColors = [0 for n in range(N)]
+        colors  = [f"C{i}" for i in np.arange(1, max(NodeColors)+1)]
+#             cmap, norm = None,None
+
+
+
+# ===========================================================================================================================
+
+#          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 2D MODE  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+#============================================================================================================================
+     
+    
+    
+    
+    
     if mode=='2d':
-        #LAYOUTS ========================================================================================================================
+        
+#           =============================================== NODES ===================================================
+
         
         if layout == 'auto':
             iG=ig.Graph.from_networkx(G)
             my_layout=iG.layout_auto()
-            sources = iG.get_edge_dataframe()['source'].map(iG.get_vertex_dataframe()._nx_name)
-            targets = iG.get_edge_dataframe()['target'].map(iG.get_vertex_dataframe()._nx_name)
-            node_coordinates=dict(enumerate(my_layout.coords))
+            node_coordinates=dict(zip([v['_nx_name'] for v in list(iG.vs)],my_layout.coords))
         elif layout == 'spring':
             node_coordinates=nx.spring_layout(G)
         elif layout == 'circular':
@@ -69,36 +152,22 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
             edges_coordinates.append(list(map(node_coordinates.get,edge)))
 
 
-        # BUILD THE FIGURE ========================================================================================================================
+#          ==================================================BUILD THE FIGURE ==================================================
         fig,ax=plt.subplots(figsize=figure_size) 
         
-        # EDGES ========================================================================================================================
         
-        for point in edges_coordinates:
+
+        
+        
+        
+        
+        #PLOT
+        for i,point in enumerate(edges_coordinates):
             ax.plot((point[0][0],point[1][0]),(point[0][1],point[1][1]),
-                    color=edge_color,
-                    linewidth=edge_linewidth,
+                    color=edge_colors[i],
+                    linewidth=edge_widths[i],
                     alpha=edge_alpha,
                     zorder=0)
-
-        
-        #NODES ========================================================================================================================
-        
-        if node_color_attribute:
-            
-            NodeClasses=[n[1][node_color_attribute] for n in G.nodes(data=True)]
-            N = len(set(NodeClasses))
-            Cdict=dict(zip(set(NodeClasses),[n for n in range(N)]))
-            NodeColors = list(map(Cdict.get,NodeClasses))
-
-            colors  = [f"C{i}" for i in np.arange(1, max(NodeColors)+1)]
-#             cmap, norm = matplotlib.colors.from_levels_and_colors(np.arange(1, max(NodeColors)+2), colors)
-
-        else:
-            N = len(G.nodes)
-            NodeColors = [0 for n in range(N)]
-            colors  = [f"C{i}" for i in np.arange(1, max(NodeColors)+1)]
-#             cmap, norm = None,None
 
         
         
@@ -119,9 +188,9 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                 s=node_size,
                 cmap=cmap)
         lab=[]
-        if annotate:
+        if node_annotation:
             
-            lab=[n[1][annotate] for n in G.nodes(data=True)]
+            lab=[n for n in G.nodes]
             ta.allocate_text(fig,
                             ax,
                             xses,
@@ -149,14 +218,22 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
             plt.savefig(save,dpi=300)
 
         plt.show()
+
+# ===========================================================================================================================
+
+#          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 3D MODE  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+#============================================================================================================================
+    
+    
     elif mode=='3d':
+        
         #LAYOUTS ========================================================================================================================
         if layout=='auto':
             iG=ig.Graph.from_networkx(G)
             my_layout=iG.layout_auto(dim=3)
-            sources = iG.get_edge_dataframe()['source'].map(iG.get_vertex_dataframe()._nx_name)
-            targets = iG.get_edge_dataframe()['target'].map(iG.get_vertex_dataframe()._nx_name)
-            node_coordinates=dict(enumerate(my_layout.coords))
+            node_coordinates=dict(zip([v['_nx_name'] for v in list(iG.vs)],my_layout.coords))
+        
         if layout == 'kk':
             node_coordinates=nx.kamada_kawai_layout(G,dim=3)
         elif layout == 'spring':
@@ -174,21 +251,21 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         Xe=sum([(node_coordinates[e[0]][0], node_coordinates[e[1]][0],None) for e in G.edges()],())# x-coordinates of edge ends
         Ye=sum([(node_coordinates[e[0]][1], node_coordinates[e[1]][1],None) for e in G.edges()],())
         Ze=sum([(node_coordinates[e[0]][2], node_coordinates[e[1]][2],None) for e in G.edges()],())
-                
+    
         traces = []
      
             
         #==================================================    LABELS    ============================================
 
-        if annotate:
-            lab=[n[1][annotate] for n in G.nodes(data=True)]
+        if node_annotation:
+            lab=[n for n in G.nodes]
             labdict = dict(zip(list(G.nodes()),lab))
         else:
             lab = []
+            labdict = dict(zip(list(G.nodes),['' for n in G.nodes]))        
         
         
-        
-        #==================================================     COLORS    ========================================
+        #==================================================     NODE COLORS    ========================================
 
         if node_color_attribute:
             
@@ -199,18 +276,25 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
             
             
             class_color_dict = dict(zip(NodeClasses,NodeColors))
-
-
-            trace1=go.Scatter3d(x=Xe,
-                   y=Ye,
-                   z=Ze,
+            
+        #==================================================     EDGE COLORS    ========================================
+            
+            n = 0
+            t = 2
+            for i in range(len(Xe)//3):
+                trace = go.Scatter3d(x=Xe[n:t], y=Ye[n:t], z=Ze[n:t],
                    mode='lines',
-                   line=dict(color='rgb(125,125,125)', width=1),
-                   hoverinfo='none',
+                   line=dict(color=edge_colors[i], width=factor_edge_width * edge_widths[i]),
+                   hoverinfo='text',
+                   hovertext = edge_annotations[i],
                    showlegend=False
                    )
+                n += 3
+                t += 3
+                traces.append(trace)
+            print(n,t)
 
-            traces.append(trace1)
+                
 
             for Class in set(NodeClasses):
                 ClassNodes = [n[0] for n in G.nodes(data = True) if n[1][node_color_attribute] == Class]
@@ -255,7 +339,10 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                     ))
 
         else:
-            N = len(G.nodes)
+        #==================================================  NO NODE COLORS   ========================================
+              
+            
+            
             NodeColors = [0 for n in range(N)]
             colors  = [f"C{i}" for i in np.arange(1, max(NodeColors)+1)]
         
@@ -265,15 +352,20 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         
         
 
-            traces.append(go.Scatter3d(x=Xe,
-                   y=Ye,
-                   z=Ze,
+            n = 0
+            t = 2
+            for i in range(len(Xe)//3):
+                trace = go.Scatter3d(x=Xe[n:t], y=Ye[n:t], z=Ze[n:t],
                    mode='lines',
-                   line=dict(color='rgb(125,125,125)', width=1),
-                   hoverinfo='none',
+                   line=dict(color=edge_colors[i], width=factor_edge_width * edge_widths[i]),
+                   hoverinfo='text',
+                   hovertext = edge_annotations[i],
                    showlegend=False
-                   ))
-
+                   )
+                n += 3
+                t += 3
+                traces.append(trace)
+            print(n,t)
 
 
             traces.append(go.Scatter3d(x=Xn,
@@ -321,16 +413,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         
         pass # STILL TO BE IMPLEMENTED
 
-
-
-
-
-
-
-
-
-
-
+    return Xe,Ye,Ze
 
 
 

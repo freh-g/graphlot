@@ -365,8 +365,6 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                 n += 3
                 t += 3
                 traces.append(trace)
-            print(n,t)
-
 
             traces.append(go.Scatter3d(x=Xn,
                             y=Yn,
@@ -413,7 +411,6 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         
         pass # STILL TO BE IMPLEMENTED
 
-    return Xe,Ye,Ze
 
 
 

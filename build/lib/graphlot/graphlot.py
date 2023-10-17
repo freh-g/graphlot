@@ -145,6 +145,10 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
             node_coordinates=nx.spectral_layout(G)
         elif layout == 'hierarchical':
             node_coordinates = nx.drawing.nx_agraph.graphviz_layout(G, prog = 'dot')
+        elif layout == 'kk':
+            node_coordinates=nx.kamada_kawai_layout(G)
+
+            
 
         
         sources = [s[0] for s in G.edges()]

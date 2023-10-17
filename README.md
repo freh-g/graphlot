@@ -43,7 +43,7 @@ gv.plot_degree_distribution(grafo)
 ```
 
 random.seed(123127844)
-gv.visualize_network(grafo,mode = '2d',node_color_attribute='Type',legend = 'Type',cmap='viridis',annotate = 'Name')
+gv.visualize_network(grafo,mode = '2d',node_color_attribute='Type',legend = 'Type',cmap='viridis',node_annotation = 'Name')
 
 ```
 

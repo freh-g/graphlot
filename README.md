@@ -58,7 +58,7 @@ Moreover graphlot allows to plot networks in 3d in order to have a more flexible
 ```
 
 random.seed(123127844)
-gv.visualize_network(grafo,mode = '3d',node_color_attribute='Type',legend = 'Type',cmap='viridis',annotate = 'Name')
+gv.visualize_network(grafo,mode = '3d',node_color_attribute='Type',legend = 'Type',cmap='viridis',node_annotation = 'Name')
 
 ```
 

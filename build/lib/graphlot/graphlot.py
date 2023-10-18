@@ -29,9 +29,9 @@ def CreateNetworkFromRandomClasses(n_of_class_nodes, n_edges):
 
 
 def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='2d',
-                      node_color_attribute=False, edge_attribute_width = False,factor_edge_width = 1 ,cmap = "viridis" ,edge_color_attribute=False, edge_annotation_attributes = False 
-                      ,node_annotation = False, node_shape = 'o', node_size=100, node_alpha=1,node_outline='black',
-                      edge_linewidth=0.5,edge_alpha=0.5,edge_color='black',
+                      node_color_attribute=False,node_annotation = False, node_shape = 'o', node_size=100, node_alpha=1,node_outline='black', show_node_label_3d = False,
+                      edge_attribute_width = False,factor_edge_width = 1 ,cmap = "viridis" ,edge_color_attribute=False, edge_annotation_attributes = False 
+                      ,edge_linewidth=0.5,edge_alpha=0.5,edge_color='black',
                       annotation_arrows = False, text_size = 10, text_color = 'black', text_margin = 0.01, 
                       text_min_distance = 0.015, text_max_distance = 0.07,
                       save=False,legend=False):
@@ -299,7 +299,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
             n = 0
             t = 2
             for i in range(len(Xe)//3):
-                trace = go.Scatter3d(x=Xe[n:t], y=Ye[n:t], z=Ze[n:t],
+                edge_trace = go.Scatter3d(x=Xe[n:t], y=Ye[n:t], z=Ze[n:t],
                    mode='lines',
                    line=dict(color=edge_colors[i], width=factor_edge_width * edge_widths[i]),
                    hoverinfo='text',
@@ -308,7 +308,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                    )
                 n += 3
                 t += 3
-                traces.append(trace)
+                traces.append(edge_trace)
                 
             nodes_unknown = [n[0] for n in G.nodes(data = True) if n[1] == {}]
             nodes_known = [n for n in G.nodes(data = True) if n[1] != {}]
@@ -326,7 +326,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                 Yc = [node_coordinates[n][1] for n in ClassNodes]
                 Zc = [node_coordinates[n][2] for n in ClassNodes]
 
-                traces.append(go.Scatter3d(x=Xc,
+                nodes_trace = go.Scatter3d(x=Xc,
                             y=Yc,
                             z=Zc,
                             mode='markers',
@@ -340,26 +340,17 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                             hovertext=ClassLabels,
                             hoverinfo='text',
                             showlegend = True
-                            ))
+                            )
+         #==================================================  ADD VISIBLE LABELS   ========================================
+ 
+                if show_node_label_3d:
+                    nodes_trace.update({'text':ClassLabels})
+                    nodes_trace.update({'hoverinfo':'none'})
+                    nodes_trace.update({'mode':'text'})
+                
+                traces.append(nodes_trace)
 
-            axis=dict(showbackground=False,
-                    showline=False,
-                    zeroline=False,
-                    showgrid=False,
-                    showticklabels=False,
-                    title=''
-                    )
-
-            fig_layout = go.Layout(
-                    title=figure_title,
-                    width=1000,
-                    height=1000,
-                    showlegend=True,
-                    scene=dict(
-                        xaxis=dict(axis),
-                        yaxis=dict(axis),
-                        zaxis=dict(axis),
-                    ))
+            
 
         else:
         #==================================================  NO NODE COLORS   ========================================
@@ -389,7 +380,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                 t += 3
                 traces.append(trace)
 
-            traces.append(go.Scatter3d(x=Xn,
+            nodes_trace = go.Scatter3d(x=Xn,
                             y=Yn,
                             z=Zn,
                             mode='markers',
@@ -401,7 +392,20 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                             hovertext=lab,
                             hoverinfo='text',
                             showlegend = False
-                            ))
+                            )
+            
+         #==================================================  ADD VISIBLE LABELS   ========================================
+       
+            node_counter=0
+            if show_node_label_3d:
+                nodes_trace.update({'text':lab})
+                nodes_trace.update({'hoverinfo':'none'})
+                nodes_trace.update({'mode':'text'})
+            
+            traces.append(nodes_trace)
+
+                    
+        #==================================================  FIX LAYOUT OF THE FIG   ========================================
 
         axis=dict(showbackground=False,
                 showline=False,
@@ -433,6 +437,10 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
     elif mode == 'cytoscape':
         
         pass # STILL TO BE IMPLEMENTED
+
+
+
+
 
 
 

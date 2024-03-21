@@ -33,7 +33,9 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                       edge_attribute_width = False,factor_edge_width = 1 ,cmap = "viridis" ,edge_color_attribute=False, edge_annotation_attributes = False 
                       ,edge_linewidth=0.5,edge_alpha=0.5,edge_color='black',
                       annotation_arrows = False, text_size = 10, text_color = 'black', text_margin = 0.01, 
-                      text_min_distance = 0.015, text_max_distance = 0.07,
+                      text_min_distance = 0.015, text_max_distance = 0.07,dpi = 300, 
+                      plot_cbar=False, cbar_title = '', cbar_ticks_fontsize = 10, cbar_shrink = 1.0, cbar_aspect = 20, 
+                      cbar_pad = 0.05,cbar_orientation = 'vertical',cbar_location = 'right', cbar_label_fontsize = 20,
                       save=False,legend=False):
     
 # ===========================================================================================================================
@@ -95,7 +97,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
 
 #           =============================================== NODES ===================================================
 
-
+    
     if node_color_attribute:
         NodeClasses = []
         for n in G.nodes(data = True):
@@ -225,9 +227,15 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         
         
         ax.axis('off')
+        if plot_cbar:
+            cbar = plt.colorbar(scatter,ax=ax,
+                         shrink = cbar_shrink, location = cbar_location, orientation = cbar_orientation,
+                         aspect = cbar_aspect, pad = cbar_pad )
+            cbar.ax.tick_params(labelsize = cbar_ticks_fontsize)
+            cbar.ax.set_ylabel(cbar_title,fontsize = cbar_label_fontsize)
         plt.tight_layout()
         if save:
-            plt.savefig(save,dpi=300)
+            plt.savefig(save,dpi=dpi)
 
         plt.show()
 
@@ -493,6 +501,7 @@ def plot_degree_distribution(graph,save_fig=False):
     ax.set_ylabel('Frequency',fontsize=20)
     ax.set_xlim(-0.150)
     
+    
     if save_fig:
-        plt.savefig(save_fig,dpi=300)
+        plt.savefig(save_fig,dpi=dpi)
     plt.show()

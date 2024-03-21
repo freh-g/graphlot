@@ -462,7 +462,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
 
 
 
-def plot_degree_distribution(graph,save_fig=False):
+def plot_degree_distribution(graph,save_fig=False,dpi = 300):
     degree=[val for (node, val) in graph.degree()]
     freqdict=Counter(degree)
     frequency=[]

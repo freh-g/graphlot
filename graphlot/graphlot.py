@@ -105,12 +105,19 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
                 NodeClasses.append(n[1][node_color_attribute])
             except:
                 NodeClasses.append('unknown')
-        N = len(set(NodeClasses))
-        Cdict=dict(zip(set(NodeClasses),[n for n in range(N)]))
-        NodeColors = list(map(Cdict.get,NodeClasses))
+        
+        if all([isinstance(classe,str) for classe in NodeClasses]):
+            # Here we will detect automatically if we need to use a categorical color type or continuous one
+        
+            N = len(set(NodeClasses))
+            Cdict=dict(zip(set(NodeClasses),[n for n in range(N)]))
+            NodeColors = list(map(Cdict.get,NodeClasses))
 
-        colors  = [f"C{i}" for i in np.arange(1, max(NodeColors)+1)]
-#             cmap, norm = matplotlib.colors.from_levels_and_colors(np.arange(1, max(NodeColors)+2), colors)
+            colors  = [f"C{i}" for i in np.arange(1, max(NodeColors)+1)]
+    #             cmap, norm = matplotlib.colors.from_levels_and_colors(np.arange(1, max(NodeColors)+2), colors)
+        else:
+            
+            NodeColors = NodeColors
 
     else:
         N = len(G.nodes)

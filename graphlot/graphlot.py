@@ -117,7 +117,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
     #             cmap, norm = matplotlib.colors.from_levels_and_colors(np.arange(1, max(NodeColors)+2), colors)
         else:
             
-            NodeColors = NodeColors
+            NodeColors = NodeClasses
 
     else:
         N = len(G.nodes)

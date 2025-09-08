@@ -206,7 +206,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         lab=[]
         if node_annotation:
             
-            lab=[n for n in G.nodes]
+            lab=[n[1][node_annotation] for n in G.nodes]
             ta.allocate_text(fig,
                             ax,
                             xses,
@@ -285,7 +285,7 @@ def visualize_network(G,layout='auto',figure_size=(15,10),figure_title='',mode='
         #==================================================    LABELS    ============================================
 
         if node_annotation:
-            lab=[n for n in G.nodes]
+            lab=[n[1][node_annotation] for n in G.nodes]
             labdict = dict(zip(list(G.nodes()),lab))
         else:
             lab = []

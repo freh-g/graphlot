@@ -13,9 +13,9 @@ long_description = (this_directory / "README.md").read_text()
 setup(
     name='graphlot',
     packages=find_packages(),
-    version='0.2.9',
+    version='0.3.1',
     long_description=long_description,
-    install_requires=['networkx','igraph','pygraphviz','textalloc','matplotlib'],
+    install_requires=['networkx','igraph','textalloc','matplotlib'],
     long_description_content_type='text/markdown',
     author='Francesco Gualdi',
     license='GPL'

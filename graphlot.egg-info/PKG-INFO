@@ -1,10 +1,20 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: graphlot
-Version: 0.2.9
+Version: 0.3.1
 Author: Francesco Gualdi
 License: GPL
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
+Requires-Dist: networkx
+Requires-Dist: igraph
+Requires-Dist: textalloc
+Requires-Dist: matplotlib
+Dynamic: author
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
 
 # Graphlot
 

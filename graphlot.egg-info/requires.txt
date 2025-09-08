@@ -1,5 +1,4 @@
 networkx
 igraph
-pygraphviz
 textalloc
 matplotlib

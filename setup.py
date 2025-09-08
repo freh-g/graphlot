@@ -13,7 +13,7 @@ long_description = (this_directory / "README.md").read_text()
 setup(
     name='graphlot',
     packages=find_packages(),
-    version='0.3.1',
+    version='0.3.2',
     long_description=long_description,
     install_requires=['networkx','igraph','textalloc','matplotlib'],
     long_description_content_type='text/markdown',
